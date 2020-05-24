@@ -45,15 +45,15 @@ export const SorApiService = {
     return ApiService.get(`sor/${resource}`, slug);
   },
   post(resource, params) {
-    return ApiService.post(`sor/${resource}`, params);
+    return ApiService.post(`sor/${resource}/`, params);
   },
   update(resource, slug, params) {
-    return ApiService.put(`sor/${resource}/${slug}`, params);
+    return ApiService.put(`sor/${resource}/${slug}/`, params);
   },
   put(resource, params) {
-    return ApiService.put(`sor/${resource}`, params);
+    return ApiService.put(`sor/${resource}/`, params);
   },
   delete(resource) {
-    return ApiService.delete(`sor/${resource}`);
+    return ApiService.delete(`sor/${resource}/`);
   },
 };

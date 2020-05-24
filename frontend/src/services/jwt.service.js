@@ -6,10 +6,8 @@ export const getToken = (type = ID_ACCESS_TOKEN) => {
 };
 
 export const setToken = ({ access, refresh }) => {
-  if (access !== undefined)
-    window.localStorage.setItem(ID_ACCESS_TOKEN, access);
-  if (refresh !== undefined)
-    window.localStorage.setItem(ID_REFRESH_TOKEN, refresh);
+  if (access) window.localStorage.setItem(ID_ACCESS_TOKEN, access);
+  if (refresh) window.localStorage.setItem(ID_REFRESH_TOKEN, refresh);
 };
 
 export const removeToken = () => {

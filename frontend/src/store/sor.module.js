@@ -7,10 +7,13 @@ const state = {
   environments: [],
   clusters: [],
   products: [],
+  owners: [],
+  labels: [],
+  operating_systems: [],
+  domains: [],
   loading: true,
   error: null,
 };
-
 const getters = {
   isLoading(state) {
     return state.loading;
@@ -26,6 +29,14 @@ const getters = {
       return resource[field] === value;
     });
   },
+  getServers: state => state.servers,
+  getEnvironments: state => state.environments,
+  getClusters: state => state.clusters,
+  getProducts: state => state.products,
+  getOwners: state => state.owners,
+  getOperatingSystems: state => state.operating_systems,
+  getDomains: state => state.domains,
+  getLabels: state => state.labels,
 };
 
 const mutations = {

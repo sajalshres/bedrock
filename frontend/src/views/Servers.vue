@@ -24,7 +24,7 @@
             </v-card-title>
             <v-card-text>
               <v-container>
-                <v-row>
+                <v-row dense>
                   <v-col cols="12">
                     <v-text-field
                       v-model="editedItem.name"
@@ -42,7 +42,7 @@
                   <v-col cols="12" sm="6">
                     <v-select
                       v-model="editedItem.category"
-                      :items="['Mail', 'FTP', 'Web', 'Proxy', 'Application']"
+                      :items="serverCategory"
                       label="Category*"
                       required
                     ></v-select>
@@ -50,13 +50,7 @@
                   <v-col cols="12">
                     <v-select
                       v-model="editedItem.operating_system"
-                      :items="[
-                        'Microsoft Windows Server 2012 R2',
-                        'Microsoft Windows Server 2018',
-                        'Ubuntu 18 LTS',
-                        'Redhat Server 8',
-                        'CentOS Server 8',
-                      ]"
+                      :items="getOperatingSystemNames"
                       label="Operating System*"
                       required
                     ></v-select>
@@ -64,7 +58,7 @@
                   <v-col cols="12" sm="6">
                     <v-select
                       v-model="editedItem.domain"
-                      :items="['AWS', 'ONPREM']"
+                      :items="getDomainNames"
                       label="Domains*"
                       required
                     ></v-select>
@@ -72,31 +66,43 @@
                   <v-col cols="12" sm="6">
                     <v-select
                       v-model="editedItem.cluster"
-                      :items="['CILIN', 'CIWIN', 'CORNERSTONEWEB']"
+                      :items="getClusterNames"
                       label="Cluster*"
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.environment"
-                      :items="['DEVELOP', 'BETA', 'STAGING', 'PRODUCTION']"
-                      label="Emvronment*"
-                      required
-                    ></v-select>
+                  <v-col cols="12">
+                    <v-autocomplete
+                      v-model="editedItem.labels"
+                      :items="getLabelNames"
+                      label="Labels*"
+                      chips
+                      multiple
+                    >
+                    </v-autocomplete>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12">
+                    <v-autocomplete
+                      v-model="editedItem.environments"
+                      :items="getEnvironmentNames"
+                      label="Environments*"
+                      chips
+                      multiple
+                    >
+                    </v-autocomplete>
+                  </v-col>
+                  <v-col cols="12" sm="6">
                     <v-select
                       v-model="editedItem.owner"
-                      :items="['DevOps', 'IT', 'DBA']"
+                      :items="getOwnerNames"
                       label="Owner*"
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6">
                     <v-select
                       v-model="editedItem.status"
-                      :items="['Active', 'Inactive', 'Decomissioned']"
+                      :items="serverStatus"
                       label="Status*"
                       required
                     ></v-select>
@@ -200,7 +206,15 @@ export default {
   },
   data: () => ({
     resourceType: 'servers',
-    breadCrumbs: ['Home', 'Sor', 'Server'], // TODO: Make breadCrumbs dynamic
+    resourceTypes: [
+      'servers',
+      'labels',
+      'clusters',
+      'environments',
+      'domains',
+      'owners',
+      'operating_systems',
+    ],
     loadingText: 'Loading Servers, Please wait.',
     dense: false,
     dialog: false,
@@ -246,6 +260,8 @@ export default {
       status: '',
       description: '',
     },
+    serverCategory: ['MAIL', 'FTP', 'PROXY', 'APP', 'BUILD'],
+    serverStatus: ['ACTIVE', 'INACTIVE', 'DECOM'],
   }),
   created() {
     this.loadResources();
@@ -263,11 +279,35 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'New Server' : 'Edit Server';
     },
-    ...mapGetters({
-      getResource: 'getResource',
-      isLoading: 'isLoading',
-      isAuthenticated: 'isAuthenticated',
-    }),
+    getEnvironmentNames() {
+      return this.getEnvironments.map(({ name }) => name);
+    },
+    getClusterNames() {
+      return this.getClusters.map(({ name }) => name);
+    },
+    getOwnerNames() {
+      return this.getOwners.map(({ name }) => name);
+    },
+    getOperatingSystemNames() {
+      return this.getOperatingSystems.map(({ name }) => name);
+    },
+    getDomainNames() {
+      return this.getDomains.map(({ name }) => name);
+    },
+    getLabelNames() {
+      return this.getLabels.map(({ name }) => name);
+    },
+    ...mapGetters([
+      'isLoading',
+      'isAuthenticated',
+      'getResource',
+      'getEnvironments',
+      'getClusters',
+      'getOwners',
+      'getOperatingSystems',
+      'getDomains',
+      'getLabels',
+    ]),
   },
   watch: {
     dialog(val) {
@@ -276,13 +316,21 @@ export default {
   },
   methods: {
     loadResources(force = false) {
-      if (this.getResource(this.resourceType).length === 0 || force) {
-        this.fetchResources(this.resourceType);
-      }
-      if (this.getResource('servers').length === 0 || force) {
-        this.fetchResources('servers');
-      }
+      this.resourceTypes.forEach(resourceType => {
+        if (this.getResource(resourceType).length === 0 || force) {
+          this.fetchResources(resourceType);
+        }
+      });
     },
+
+    getResourceByName(resourceType) {
+      if (this.getResource(resourceType).length === 0) {
+        this.fetchResources(resourceType);
+      }
+
+      return this.getResource(resourceType).map(({ name }) => name);
+    },
+
     editItem(item) {
       this.editedIndex = this.getResource(this.resourceType).indexOf(item);
       this.editedItem = Object.assign({}, item);

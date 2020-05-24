@@ -87,7 +87,7 @@ const actions = {
       refresh: JwtService.getToken(JwtService.ID_REFRESH_TOKEN),
     })
       .then(({ data }) => {
-        JwtService.setToken({ access: data.acess });
+        JwtService.setToken({ access: data.access });
       })
       .catch(error => {
         commit(mutation.PURGE_AUTH);
