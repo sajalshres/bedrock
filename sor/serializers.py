@@ -17,6 +17,11 @@ from sor.models import (
 
 
 class ManyToOneRelatedField(serializers.Field):
+    """ManytoOne related custom serializer field
+
+    TODO: Add Unit Test
+    """
+
     def to_representation(self, related_field):
         return related_field.name
 
@@ -35,6 +40,11 @@ class ManyToOneRelatedField(serializers.Field):
 
 
 class ManyToManyRelatedField(serializers.Field):
+    """ManytoMany related custom serializer field
+
+    TODO: Add Unit Test
+    """
+
     def to_representation(self, related_field):
         return [item.name for item in related_field.all()]
 

@@ -153,15 +153,12 @@
         </template>
         <template v-slot:expanded-item="{ headers, item }">
           <td :colspan="headers.length">
-            <v-chip
+            <ServerModal
               v-for="server in getServer(item.name)"
               :key="server.id"
-              :color="getStatusColor(server.status)"
-              :small="dense"
-              dark
-              class="mx-2"
-              >{{ server.name }}</v-chip
+              :server="server"
             >
+            </ServerModal>
           </td>
         </template>
       </v-data-table>
@@ -180,11 +177,13 @@ import {
   RESOURCE_DELETE,
 } from '../store/actions.type';
 import BreadCrumbs from '../components/BreadCrumbs';
+import ServerModal from '../components/ServerModal';
 
 export default {
   name: 'Environments',
   components: {
     BreadCrumbs,
+    ServerModal,
   },
   data: () => ({
     resourceType: 'environments',
