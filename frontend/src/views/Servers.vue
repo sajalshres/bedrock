@@ -132,7 +132,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="getResource(resourceType)"
+        :items="getServers"
         :search="search"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
@@ -301,6 +301,7 @@ export default {
       'isLoading',
       'isAuthenticated',
       'getResource',
+      'getServers',
       'getEnvironments',
       'getClusters',
       'getOwners',
@@ -321,14 +322,6 @@ export default {
           this.fetchResources(resourceType);
         }
       });
-    },
-
-    getResourceByName(resourceType) {
-      if (this.getResource(resourceType).length === 0) {
-        this.fetchResources(resourceType);
-      }
-
-      return this.getResource(resourceType).map(({ name }) => name);
     },
 
     editItem(item) {
