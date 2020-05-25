@@ -138,7 +138,7 @@
         class="elevation-1"
       >
         <template v-slot:item.name="{ item }">
-          {{ item.name }} ({{ getServerByCluster(item.name).length }})
+          {{ item.name }} ({{ getServer(item.name).length }})
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)">
@@ -150,15 +150,12 @@
         </template>
         <template v-slot:expanded-item="{ headers, item }">
           <td :colspan="headers.length">
-            <v-chip
-              v-for="server in getServerByCluster(item.name)"
+            <ServerModal
+              v-for="server in getServer(item.name)"
               :key="server.id"
-              :color="getStatusColor(server.status)"
-              :small="dense"
-              dark
-              class="mx-2"
-              >{{ server.name }}</v-chip
+              :server="server"
             >
+            </ServerModal>
           </td>
         </template>
       </v-data-table>
@@ -176,11 +173,13 @@ import {
   RESOURCE_DELETE,
 } from '../store/actions.type';
 import BreadCrumbs from '../components/BreadCrumbs';
+import ServerModal from '../components/ServerModal';
 
 export default {
   name: 'Environments',
   components: {
     BreadCrumbs,
+    ServerModal,
   },
   data: () => ({
     resourceType: 'clusters',
@@ -277,7 +276,7 @@ export default {
       this.close();
     },
 
-    getServerByCluster(clusterName) {
+    getServer(clusterName) {
       return this.getResourceByField('servers', 'cluster', clusterName);
     },
 
