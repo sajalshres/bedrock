@@ -77,7 +77,6 @@ const actions = {
   [action.CHECK_AUTH]({ commit, dispatch }) {
     if (JwtService.getToken()) {
       ApiService.setHeader();
-      dispatch(action.REFRESH_AUTH);
     } else {
       commit(mutation.PURGE_AUTH);
     }

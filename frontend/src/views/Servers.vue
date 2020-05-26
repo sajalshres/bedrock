@@ -12,6 +12,7 @@
           class="pb-1"
         ></v-text-field>
         <v-spacer />
+        <Labels />
         <v-dialog v-if="isAuthenticated" v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on }">
             <v-btn class="mx-2" depressed fab small v-on="on">
@@ -131,7 +132,7 @@
         <v-switch class="mx-2" label="Small" v-model="dense"></v-switch>
       </v-card-title>
       <v-data-table
-        :headers="headers"
+        :headers="getHeaders"
         :items="getServers"
         :search="search"
         :single-expand="singleExpand"
@@ -198,11 +199,13 @@ import {
   RESOURCE_DELETE,
 } from '../store/actions.type';
 import BreadCrumbs from '../components/BreadCrumbs';
+import Labels from '../components/Labels';
 
 export default {
   name: 'Server',
   components: {
     BreadCrumbs,
+    Labels,
   },
   data: () => ({
     resourceType: 'servers',
@@ -221,18 +224,6 @@ export default {
     expanded: [],
     singleExpand: true,
     search: '',
-    headers: [
-      { text: 'Name', align: 'start', value: 'name' },
-      { text: 'IP Address', value: 'ip_address' },
-      { text: 'Category', value: 'category' },
-      { text: 'Owner', value: 'owner' },
-      { text: 'Domain', value: 'domain' },
-      { text: 'Cluster', value: 'cluster' },
-      { text: 'Environments', value: 'environments' },
-      { text: 'Operating System', value: 'operating_system' },
-      { text: 'Labels', value: 'labels', align: 'left' },
-      { text: 'Status', value: 'status', align: 'left' },
-    ],
     editedIndex: -1,
     editedItem: {
       name: '',
@@ -264,18 +255,44 @@ export default {
     serverStatus: ['ACTIVE', 'INACTIVE', 'DECOM'],
   }),
   created() {
+    console.log(this.$vuetify.breakpoint);
     this.loadResources();
-    if (this.isAuthenticated) {
-      this.headers.push({
-        text: 'Actions',
-        value: 'actions',
-        align: 'end',
-        sortable: false,
-      });
-    }
-    this.headers.push({ text: '', value: 'data-table-expand' });
   },
   computed: {
+    getHeaders() {
+      const headers = [
+        { text: 'Name', align: 'start', value: 'name' },
+        { text: 'IP Address', value: 'ip_address', align: 'end' },
+        { text: 'Owner', value: 'owner', align: 'end' },
+        { text: 'Domain', value: 'domain', align: 'end' },
+        { text: 'Cluster', value: 'cluster', align: 'end' },
+        { text: 'Environments', value: 'environments', align: 'end' },
+      ];
+
+      if (this.$vuetify.breakpoint.name === 'xl') {
+        headers.push({ text: 'Category', value: 'category', align: 'end' });
+        headers.push({
+          text: 'Operating System',
+          value: 'operating_system',
+          align: 'end',
+        });
+        headers.push({ text: 'Labels', value: 'labels', align: 'end' });
+      }
+
+      headers.push({ text: 'Status', value: 'status', align: 'end' });
+
+      if (this.isAuthenticated) {
+        headers.push({
+          text: 'Actions',
+          value: 'actions',
+          align: 'end',
+          sortable: false,
+        });
+      }
+      headers.push({ text: '', value: 'data-table-expand' });
+
+      return headers;
+    },
     formTitle() {
       return this.editedIndex === -1 ? 'New Server' : 'Edit Server';
     },

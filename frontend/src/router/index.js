@@ -7,6 +7,8 @@ import Environments from '../views/Environments.vue';
 import Clusters from '../views/Clusters.vue';
 import Products from '../views/Products.vue';
 import OperatingSystems from '../views/OperatingSystems.vue';
+import Domains from '../views/Domains.vue';
+import Owners from '../views/Owners.vue';
 
 Vue.use(VueRouter);
 
@@ -48,6 +50,16 @@ const routes = [
     path: '/sor/os',
     name: 'operating-system',
     component: OperatingSystems,
+  },
+  {
+    path: '/sor/domain',
+    name: 'domain',
+    component: Domains,
+  },
+  {
+    path: '/sor/owner',
+    name: 'owner',
+    component: Owners,
   },
 ];
 

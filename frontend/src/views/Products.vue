@@ -32,81 +32,41 @@
                       required
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.ip_address"
-                      label="IP Address*"
+                      v-model="editedItem.port"
+                      label="Port*"
                       required
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-select
-                      v-model="editedItem.category"
-                      :items="['Mail', 'FTP', 'Web', 'Proxy', 'Application']"
-                      label="Category*"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-select
-                      v-model="editedItem.operating_system"
-                      :items="[
-                        'Microsoft Windows Server 2012 R2',
-                        'Microsoft Windows Server 2018',
-                        'Ubuntu 18 LTS',
-                        'Redhat Server 8',
-                        'CentOS Server 8',
-                      ]"
-                      label="Operating System*"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-select
-                      v-model="editedItem.domain"
-                      :items="['AWS', 'ONPREM']"
-                      label="Domains*"
-                      required
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-select
-                      v-model="editedItem.cluster"
-                      :items="['CILIN', 'CIWIN', 'CORNERSTONEWEB']"
-                      label="Cluster*"
-                      required
-                    ></v-select>
-                  </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.environment"
-                      :items="['DEVELOP', 'BETA', 'STAGING', 'PRODUCTION']"
-                      label="Emvronment*"
+                    <v-text-field
+                      v-model="editedItem.version"
+                      label="Version*"
                       required
-                    ></v-select>
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
                       v-model="editedItem.owner"
-                      :items="['DevOps', 'IT', 'DBA']"
+                      :items="getOwnerNames"
                       label="Owner*"
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.status"
-                      :items="['Active', 'Inactive', 'Decomissioned']"
-                      label="Status*"
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="editedItem.link"
+                      label="Link*"
                       required
-                    ></v-select>
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                    <v-textarea
-                      v-model="editedItem.description"
-                      label="Description"
-                      rows="1"
-                    ></v-textarea>
+                    <v-text-field
+                      v-model="editedItem.repository"
+                      label="Repository*"
+                      required
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -126,7 +86,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="getResource(resourceType)"
+        :items="getProducts"
         :search="search"
         :loading="isLoading"
         :loading-text="loadingText"
@@ -171,23 +131,29 @@ export default {
     singleExpand: true,
     search: '',
     headers: [
-      { text: 'Name', align: 'start', value: 'name' },
-      { text: 'Port', value: 'port' },
-      { text: 'Version', value: 'version' },
-      { text: 'Owner', value: 'owner' },
-      { text: 'Link', value: 'link' },
-      { text: 'Repository', value: 'repository' },
+      { text: 'Name', value: 'name', align: 'start' },
+      { text: 'Port', value: 'port', align: 'end' },
+      { text: 'Version', value: 'version', align: 'end' },
+      { text: 'Owner', value: 'owner', align: 'end' },
+      { text: 'Link', value: 'link', align: 'end' },
+      { text: 'Repository', value: 'repository', align: 'end' },
     ],
     editedIndex: -1,
     editedItem: {
       name: '',
-      description: '',
-      status: '',
+      port: '',
+      version: '',
+      owner: '',
+      link: '',
+      repository: '',
     },
     defaultItem: {
       name: '',
-      description: '',
-      status: '',
+      port: '',
+      version: '',
+      owner: '',
+      link: '',
+      repository: '',
     },
   }),
   created() {
@@ -196,6 +162,7 @@ export default {
       this.headers.push({
         text: 'Actions',
         value: 'actions',
+        align: 'end',
         sortable: false,
         width: '10%',
       });
@@ -205,12 +172,18 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'New Server' : 'Edit Server';
     },
-    ...mapGetters({
-      getResource: 'getResource',
-      getResourceByField: 'getResourceByField',
-      isLoading: 'isLoading',
-      isAuthenticated: 'isAuthenticated',
-    }),
+    getOwnerNames() {
+      return this.getOwners.map(({ name }) => name);
+    },
+    ...mapGetters([
+      'getProducts',
+      'getServers',
+      'getOwners',
+      'getResource',
+      'getResourceByField',
+      'isLoading',
+      'isAuthenticated',
+    ]),
   },
   watch: {
     dialog(val) {
@@ -219,15 +192,18 @@ export default {
   },
   methods: {
     loadResources(force = false) {
-      if (this.getResource(this.resourceType).length === 0 || force) {
+      if (this.getProducts.length === 0 || force) {
         this.fetchResources(this.resourceType);
       }
-      if (this.getResource('servers').length === 0 || force) {
+      if (this.getServers.length === 0 || force) {
         this.fetchResources('servers');
+      }
+      if (this.getOwnerNames.length === 0 || force) {
+        this.fetchResources('owners');
       }
     },
     editItem(item) {
-      this.editedIndex = this.getResource(this.resourceType).indexOf(item);
+      this.editedIndex = this.getProducts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },

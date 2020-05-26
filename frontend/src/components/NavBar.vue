@@ -57,7 +57,7 @@
       :clipped="$vuetify.breakpoint.lgAndUp"
       app
     >
-      <v-list flat dense>
+      <v-list flat dense nav>
         <template v-for="(item, index) in items">
           <v-subheader v-if="item.header" :key="item.header">{{
             item.header
@@ -67,7 +67,6 @@
             v-else-if="item.children"
             :key="item.title"
             :prepend-icon="item.icon"
-            :to="item.link"
           >
             <template v-slot:activator>
               <v-list-item>
@@ -76,7 +75,11 @@
                 </v-list-item-content>
               </v-list-item>
             </template>
-            <v-list-item v-for="(child, i) in item.children" :key="i">
+            <v-list-item
+              v-for="(child, i) in item.children"
+              :key="i"
+              :to="child.link"
+            >
               <v-list-item-action v-if="child.icon"
                 ><v-icon>{{ child.icon }}</v-icon></v-list-item-action
               >
@@ -148,14 +151,13 @@ export default {
       },
       {
         icon: 'mdi-folder',
-        title: 'Types',
+        title: 'More',
         children: [
-          { icon: 'mdi-domain', title: 'Domains', link: null },
-          { icon: 'mdi-layers', title: 'EnvType', link: null },
+          { icon: 'mdi-domain', title: 'Domains', link: { name: 'domain' } },
           {
             icon: 'mdi-star-box-multiple',
             title: 'Owner',
-            link: null,
+            link: { name: 'owner' },
           },
         ],
       },
@@ -178,4 +180,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.v-list-item--dense,
+.v-list--dense .v-list-item {
+  min-height: 30px;
+  max-height: 35px;
+}
+</style>

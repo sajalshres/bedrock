@@ -12,8 +12,8 @@
   ],
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
-  "editor.detectIndentation": true,
-  //"editor.tabSize": 2,
+  //"editor.detectIndentation": true,
+  "editor.tabSize": 2,
   // files settings
   "files.watcherExclude": {
     "**/.git/objects/**": true,
@@ -35,6 +35,7 @@
   // javascript settings
   "eslint.enable": true,
   "vetur.validation.template": false,
+  "vetur.format.defaultFormatter.html": "prettyhtml",
   "eslint.validate": [
     "vue",
     "html",
@@ -45,5 +46,5 @@
   },
   "eslint.workingDirectories": [
     "./frontend"
-  ]
+  ],
 }

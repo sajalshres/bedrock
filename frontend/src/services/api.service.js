@@ -1,5 +1,8 @@
 import axios from 'axios';
 import JwtService from './jwt.service';
+import store from '../store';
+import { PURGE_AUTH } from '../store/mutations.type';
+import { REFRESH_AUTH } from '../store/actions.type';
 
 const ApiClient = axios.create({
   baseURL: '/api',
@@ -10,6 +13,53 @@ const ApiClient = axios.create({
   },
   timeout: 10000,
 });
+
+ApiClient.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if (error.response.status !== 401) {
+      return new Promise((resolve, reject) => {
+        reject(error);
+      });
+    }
+
+    if (error.config.url === '/api/auth/token/refresh') {
+      store.commit(PURGE_AUTH);
+
+      return new Promise((resolve, reject) => {
+        reject(error);
+      });
+    }
+
+    if (error.response.data.code === 'token_not_valid') {
+      return Promise.all([store.dispatch(REFRESH_AUTH)])
+        .then(() => {
+          const config = error.config;
+          config.headers['Authorization'] = `Bearer ${JwtService.getToken()}`;
+          ApiClient.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${JwtService.getToken()}`;
+
+          return new Promise((resolve, reject) => {
+            axios
+              .request(config)
+              .then(response => {
+                console.log(response);
+                resolve(response);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          });
+        })
+        .catch(error => {
+          Promise.reject(error);
+        });
+    }
+  }
+);
 
 const ApiService = {
   setHeader() {

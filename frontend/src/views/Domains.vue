@@ -32,11 +32,26 @@
                       required
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.location"
+                      label="Location*"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="editedItem.category"
-                      :items="environmentCategory"
-                      label="Category*"
+                      v-model="editedItem.owner"
+                      :items="getOwnerNames"
+                      label="Owner*"
+                      required
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-select
+                      v-model="editedItem.status"
+                      :items="domainStatus"
+                      label="Status*"
                       required
                     ></v-select>
                   </v-col>
@@ -65,7 +80,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="getResource(resourceType)"
+        :items="getDomains"
         :search="search"
         :single-expand="singleExpand"
         :expanded.sync="expanded"
@@ -78,9 +93,6 @@
       >
         <template v-slot:item.name="{ item }">
           {{ item.name }} ({{ getServer(item.name).length }})
-        </template>
-        <template v-slot:item.category="{ item }">
-          <v-chip small label>{{ item.category }}</v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)">
@@ -108,7 +120,6 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 import { getStatusColor } from '../utils/common';
-
 import {
   FETCH_RESOURCES,
   RESOURCE_CREATE,
@@ -119,41 +130,46 @@ import BreadCrumbs from '../components/BreadCrumbs';
 import ServerModal from '../components/ServerModal';
 
 export default {
-  name: 'Environments',
+  name: 'Domains',
   components: {
     BreadCrumbs,
     ServerModal,
   },
   data: () => ({
-    resourceType: 'environments',
-    loadingText: 'Loading environments, please wait.',
+    resourceType: 'domains',
+    loadingText: 'Loading clusters, please wait.',
     dense: false,
     dialog: false,
     expanded: [],
     singleExpand: true,
     search: '',
     headers: [
-      { text: 'Name', align: 'start', value: 'name', width: '90%' },
-      { text: 'Category', align: 'end', value: 'category', width: '10%' },
+      { text: 'Name', value: 'name', align: 'start', width: '40%' },
+      { text: 'Location', value: 'location', align: 'end' },
+      { text: 'Owner', value: 'owner', align: 'end' },
+      { text: 'Description', value: 'description', align: 'end' },
+      { text: 'Status', value: 'status', align: 'end' },
     ],
-    environments: [],
-    environmentCategory: ['DEV', 'BETA', 'STAGE', 'PROD'],
     editedIndex: -1,
     editedItem: {
       name: '',
-      category: '',
+      location: '',
+      owner: '',
       description: '',
+      status: '',
     },
     defaultItem: {
       name: '',
-      category: '',
+      location: '',
+      owner: '',
       description: '',
+      status: '',
     },
+    domainStatus: ['ACTIVE', 'INACTIVE', 'DECOM'],
   }),
   created() {
     this.loadResources();
     if (this.isAuthenticated) {
-      this.headers[0].width = '80%';
       this.headers.push({
         text: 'Actions',
         value: 'actions',
@@ -166,14 +182,19 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Server' : 'Edit Server';
+      return this.editedIndex === -1 ? 'New Cluster' : 'Edit Cluster';
     },
-    ...mapGetters({
-      getResource: 'getResource',
-      getResourceByField: 'getResourceByField',
-      isLoading: 'isLoading',
-      isAuthenticated: 'isAuthenticated',
-    }),
+    getOwnerNames() {
+      return this.getOwners.map(({ name }) => name);
+    },
+    ...mapGetters([
+      'getServers',
+      'getOwners',
+      'getDomains',
+      'getResourceByField',
+      'isLoading',
+      'isAuthenticated',
+    ]),
   },
   watch: {
     dialog(val) {
@@ -182,22 +203,25 @@ export default {
   },
   methods: {
     loadResources(force = false) {
-      if (this.getResource(this.resourceType).length === 0 || force) {
+      if (this.getDomains.length === 0 || force) {
         this.fetchResources(this.resourceType);
       }
-      if (this.getResource('servers').length === 0 || force) {
+      if (this.getServers.length === 0 || force) {
         this.fetchResources('servers');
+      }
+      if (this.getOwners.length === 0 || force) {
+        this.fetchResources('owners');
       }
     },
     editItem(item) {
-      this.editedIndex = this.getResource(this.resourceType).indexOf(item);
+      this.editedIndex = this.getDomains.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(id) {
       confirm('Are you sure you want to delete this item?') &&
-        this.removeResource({ type: 'environments', id: id });
+        this.removeResource({ type: this.resourceType, id: id });
     },
     close() {
       this.dialog = false;
@@ -210,24 +234,20 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         this.updateResource({
-          type: 'environments',
+          type: this.resourceType,
           resource: this.editedItem,
         });
       } else {
         this.createResource({
-          type: 'environments',
+          type: this.resourceType,
           resource: this.editedItem,
         });
       }
       this.close();
     },
 
-    getServer(environmentName) {
-      return this.getResourceByField(
-        'servers',
-        'environments',
-        environmentName
-      );
+    getServer(domainName) {
+      return this.getResourceByField('servers', 'domain', domainName);
     },
 
     getStatusColor: getStatusColor,
