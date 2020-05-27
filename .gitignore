@@ -135,3 +135,7 @@ venv.bak/
 
 # vscode
 *.code-workspace
+
+# Deployment
+.env.prod
+.env.prod.db

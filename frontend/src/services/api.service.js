@@ -25,7 +25,8 @@ ApiClient.interceptors.response.use(
       });
     }
 
-    if (error.config.url === '/api/auth/token/refresh') {
+    console.log({ error });
+    if (error.config.url === 'auth/token/refresh/') {
       store.commit(PURGE_AUTH);
 
       return new Promise((resolve, reject) => {
