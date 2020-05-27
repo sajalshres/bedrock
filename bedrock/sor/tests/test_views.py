@@ -176,9 +176,13 @@ class ClusterViewTestCase(APITestCase):
             "name": "CLUSTERA Updated",
             "description": "A test cluster",
         }
-        response = self.client.put(f"{self.url}1/", data, format="json")
+        response = self.client.put(
+            f"{self.url}{self.model_instance.id}/", data, format="json"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Cluster.objects.get(id=1).name, data["name"])
+        self.assertEqual(
+            Cluster.objects.get(name="CLUSTERA Updated").name, data["name"]
+        )
 
     def test_update_invalid_cluster(self):
         data = {
@@ -189,7 +193,9 @@ class ClusterViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_remove_cluster(self):
-        response = self.client.delete(f"{self.url}1/", format="json")
+        response = self.client.delete(
+            f"{self.url}{self.model_instance.id}/", format="json"
+        )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_remove_invalid_cluster(self):

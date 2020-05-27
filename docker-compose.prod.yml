@@ -3,8 +3,8 @@ version: "3.7"
 services:
   web:
     build:
-      context: .
-      dockerfile: deployment/Dockerfile.prod
+      context: ./bedrock/
+      dockerfile: ./deployment/Dockerfile.prod
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8081
     volumes:
       - static_volume:/home/app/web/static
@@ -15,7 +15,6 @@ services:
     depends_on:
       - db
     container_name: bedrock_web
-
   db:
     image: postgres:12.0-alpine
     volumes:
@@ -33,7 +32,6 @@ services:
       - ./.env.prod.pgadmin
     restart: always
     container_name: bedrock_pgadmin
-
   nginx:
     build:
       context: ./deployment

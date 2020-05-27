@@ -71,12 +71,13 @@ class OwnerSerializerTestCase(TestCase):
 
     def test_owner_serializer_give_expected_output(self):
         valid_data = {
-            "id": 1,
             "name": "test",
             "email": "test@example.com",
             "description": "A test owner",
         }
-        self.assertDictEqual(self.serializer.data, valid_data)
+        actual_data = self.serializer.data
+        del actual_data["id"]
+        self.assertDictEqual(actual_data, valid_data)
 
     def test_owner_serializer_is_valid_on_correct_data(self):
         data = {
