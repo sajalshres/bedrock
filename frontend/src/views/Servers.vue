@@ -255,7 +255,6 @@ export default {
     serverStatus: ['ACTIVE', 'INACTIVE', 'DECOM'],
   }),
   created() {
-    console.log(this.$vuetify.breakpoint);
     this.loadResources();
   },
   computed: {

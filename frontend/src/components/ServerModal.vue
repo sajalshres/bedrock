@@ -91,14 +91,13 @@ export default {
   props: {
     server: Object,
   },
-  data: () => ({}),
+  data: () => ({
+    data: false,
+  }),
   methods: {
     getStatusColor: getStatusColor,
   },
   computed: {
-    dialog() {
-      return false;
-    },
     hasLabels() {
       return this.server.labels.length > 0;
     },

@@ -26,5 +26,17 @@ services:
       - POSTGRES_DB=bedrock_db
     container_name: bedrock_db
 
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    ports:
+      - 5445:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin
+      PGADMIN_DEFAULT_PASSWORD: admin1234
+    restart: always
+    container_name: bedrock_pgadmin
+
 volumes:
   postgres_data:

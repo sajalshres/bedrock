@@ -139,3 +139,4 @@ venv.bak/
 # Deployment
 .env.prod
 .env.prod.db
+.env.prod.pgadmin

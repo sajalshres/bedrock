@@ -4,10 +4,12 @@ services:
   web:
     build:
       context: .
-      dockerfile: deployment/Dockerfile
-    command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8081
+      dockerfile: deployment/Dockerfile.prod
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8081
+    volumes:
+      - static_volume:/home/app/web/static
     ports:
-      - 8081:8081
+      - 8081
     env_file:
       - ./.env.prod
     depends_on:
@@ -21,6 +23,29 @@ services:
     environment:
       - ./.env.prod.db
     container_name: bedrock_db
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    ports:
+      - 5445:80
+    environment:
+      - ./.env.prod.pgadmin
+    restart: always
+    container_name: bedrock_pgadmin
+
+  nginx:
+    build:
+      context: ./deployment
+      dockerfile: Dockerfile.nginx
+    volumes:
+      - static_volume:/home/app/web/static
+    ports:
+      - 9090:80
+    depends_on:
+      - web
+    container_name: bedrock_nginx
 
 volumes:
   postgres_data:
+  static_volume:
