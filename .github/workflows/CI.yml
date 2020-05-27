@@ -8,10 +8,12 @@ on:
 
 jobs:
   build:
+    name: Build Docker image
     runs-on: ubuntu-latest
-
     steps:
-      - name: Build the Docker image
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: build
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
