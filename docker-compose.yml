@@ -5,6 +5,7 @@ services:
     build:
       context: ./bedrock
       dockerfile: ./deployment/Dockerfile
+    image: sajalshres/bedrock:develop
     command: python manage.py runserver 0.0.0.0:8081
     volumes:
       - ./bedrock:/usr/src/app/
