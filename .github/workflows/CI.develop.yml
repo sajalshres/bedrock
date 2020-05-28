@@ -1,4 +1,4 @@
-name: Bedrock CI Develop
+name: CI Develop
 
 on:
   push:

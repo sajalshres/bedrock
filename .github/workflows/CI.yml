@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: CI Master
 
 on:
   push:
@@ -21,4 +21,4 @@ jobs:
           repository: sajalshres/bedrock
           tags: latest
           path: bedrock/
-          dockerfile: bedrock/deployment/Dockerfile
+          dockerfile: bedrock/deployment/Dockerfile.prod
