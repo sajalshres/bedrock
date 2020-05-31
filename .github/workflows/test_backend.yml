@@ -19,9 +19,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Dependencies
+        working-directory: ./bedrock
         run: |
           python -m pip install --upgrade pip
-          pip install -r bedrock/requirements.txt
+          pip install -r requirements.txt
       - name: Run Tests
+        working-directory: ./bedrock
         run: |
-          cd bedrock && python manage.py test --settings=config.settings_tests
+          python manage.py test --settings=config.settings_tests
