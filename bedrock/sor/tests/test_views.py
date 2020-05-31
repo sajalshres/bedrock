@@ -18,11 +18,6 @@ from sor.models import (
 )
 
 
-class FailedTestCase(APITestCase):
-    def test_fail_a_test(self):
-        self.assertFalse(True)
-
-
 class LabelViewTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
