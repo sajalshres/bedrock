@@ -166,7 +166,7 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Server' : 'Edit Server';
+      return this.editedIndex === -1 ? 'New Environment' : 'Edit Environment';
     },
     ...mapGetters({
       getResource: 'getResource',

@@ -137,7 +137,7 @@ export default {
   },
   data: () => ({
     resourceType: 'domains',
-    loadingText: 'Loading clusters, please wait.',
+    loadingText: 'Loading domains, please wait.',
     dense: false,
     dialog: false,
     expanded: [],
@@ -182,7 +182,7 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Cluster' : 'Edit Cluster';
+      return this.editedIndex === -1 ? 'New Domain' : 'Edit Domain';
     },
     getOwnerNames() {
       return this.getOwners.map(({ name }) => name);
