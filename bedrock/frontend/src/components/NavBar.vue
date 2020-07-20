@@ -32,6 +32,12 @@
             </v-list-item-action>
             <v-list-item-title>Profile</v-list-item-title>
           </v-list-item>
+          <v-list-item :to="{ name: 'vault' }">
+            <v-list-item-action>
+              <v-icon>mdi-lock</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>Vault</v-list-item-title>
+          </v-list-item>
           <v-list-item @click="logout">
             <v-list-item-action>
               <v-icon>mdi-logout</v-icon>
