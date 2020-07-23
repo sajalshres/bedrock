@@ -3,8 +3,9 @@ version: "3.7"
 services:
   web:
     build:
-      context: ./bedrock/
+      context: ./bredrock
       dockerfile: ./deployment/Dockerfile.prod
+    image: docker.verscend.net/bredrock:latest
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8081
     volumes:
       - static_volume:/home/app/web/static
@@ -14,27 +15,27 @@ services:
       - ./.env.prod
     depends_on:
       - db
-    container_name: bedrock_web
+    container_name: bredrock_web
   db:
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
+    env_file:
       - ./.env.prod.db
-    container_name: bedrock_db
+    container_name: bredrock_db
   pgadmin:
     image: dpage/pgadmin4
     depends_on:
       - db
     ports:
       - 5445:80
-    environment:
+    env_file:
       - ./.env.prod.pgadmin
     restart: always
-    container_name: bedrock_pgadmin
+    container_name: bredrock_pgadmin
   nginx:
     build:
-      context: ./deployment
+      context: ./bredrock/deployment
       dockerfile: Dockerfile.nginx
     volumes:
       - static_volume:/home/app/web/static
@@ -42,7 +43,7 @@ services:
       - 9090:80
     depends_on:
       - web
-    container_name: bedrock_nginx
+    container_name: bredrock_nginx
 
 volumes:
   postgres_data:

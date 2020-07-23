@@ -35,7 +35,7 @@
                   <v-col cols="12">
                     <v-text-field
                       v-model="editedItem.email"
-                      label="Nmail*"
+                      label="Email*"
                       required
                     ></v-text-field>
                   </v-col>

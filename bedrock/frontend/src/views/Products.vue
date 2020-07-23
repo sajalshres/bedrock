@@ -170,7 +170,7 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Server' : 'Edit Server';
+      return this.editedIndex === -1 ? 'New Product' : 'Edit Product';
     },
     getOwnerNames() {
       return this.getOwners.map(({ name }) => name);

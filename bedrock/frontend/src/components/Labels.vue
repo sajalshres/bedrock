@@ -18,7 +18,7 @@
         </v-row>
       </v-card-text>
       <v-card-text>
-        <v-row>
+        <v-row v-if="isAuthenticated">
           <v-text-field
             flat
             solo-inverted
@@ -49,7 +49,7 @@ export default {
     dialog: false,
   }),
   computed: {
-    ...mapGetters(['getLabels']),
+    ...mapGetters(['isAuthenticated', 'getLabels']),
   },
   methods: {
     save() {

@@ -2,8 +2,12 @@
 # BUILDER #
 ###########
 
+#################
+# BUILD BACKEND #
+#################
+
 # pull official base image
-FROM python:3.8.0-alpine as builder
+FROM python:3.8.0-alpine as build-backend
 
 # set work directory
 WORKDIR /usr/src/app
@@ -13,8 +17,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
-RUN apk update \
-  && apk add postgresql-dev gcc python3-dev musl-dev
+RUN apk update &&
+apk add postgresql-dev gcc python3-dev musl-dev
 
 # lint
 RUN pip install --upgrade pip
@@ -24,6 +28,25 @@ COPY . /usr/src/app/
 RUN pip wheel --no-cache-dir --no-deps \
   --wheel-dir /usr/src/app/wheels -r requirements.txt
 
+##################
+# BUILD FRONTEND #
+##################
+FROM node:lts-alpine as build-frontend
+
+# set work directory
+WORKDIR /usr/src/app
+
+# copy both 'package.json' and 'package-lock.json'
+COPY frontend/package*.json ./
+
+# install project dependencies
+RUN npm install
+
+# copy project files and folders to the current working directory
+COPY frontend/ .
+
+# build app for production with minification
+RUN npm run build
 
 #########
 # FINAL #
@@ -47,13 +70,16 @@ WORKDIR $APP_HOME
 
 # install dependencies
 RUN apk update && apk add libpq
-COPY --from=builder /usr/src/app/wheels /wheels
-COPY --from=builder /usr/src/app/requirements.txt .
+COPY --from=build-backend /usr/src/app/wheels /wheels
+COPY --from=build-backend /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
 
 # copy project
 COPY . $APP_HOME
+
+# copy frontend
+COPY --from=build-frontend /usr/src/app/dist frontend/dist
 
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME
