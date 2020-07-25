@@ -19,9 +19,38 @@
             class="pb-1"
           ></v-text-field>
           <v-spacer />
-          <v-btn class="mx-2" depressed fab small @click.stop>
-            <v-icon dark>mdi-plus</v-icon>
-          </v-btn>
+          <v-speed-dial v-model="fab" direction="left">
+            <template v-slot:activator>
+              <v-btn v-model="fab" depressed fab small>
+                <v-icon v-if="fab">mdi-close</v-icon>
+                <v-icon v-else>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn fab small v-bind="attrs" v-on="on">
+                  <v-icon>mdi-contain</v-icon>
+                </v-btn>
+              </template>
+              <span>Vault Item</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn fab small v-bind="attrs" v-on="on">
+                  <v-icon>mdi-key-variant</v-icon>
+                </v-btn>
+              </template>
+              <span>Vault Login</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn fab small v-bind="attrs" v-on="on">
+                  <v-icon>mdi-note-text</v-icon>
+                </v-btn>
+              </template>
+              <span>Vault Note</span>
+            </v-tooltip>
+          </v-speed-dial>
           <v-btn class="mx-2" depressed fab small @click.stop>
             <v-icon dark>mdi-reload</v-icon>
           </v-btn>
@@ -64,6 +93,7 @@ export default {
   data: () => ({
     resourceType: 'vault',
     loadingText: 'Loading vault, please wait.',
+    fab: false,
     dense: false,
     dialog: false,
     expanded: [],
