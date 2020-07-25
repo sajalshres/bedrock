@@ -6,3 +6,5 @@ A DevOps application to bring together infrastructure and development.
 
 - Python
 - Django
+- Javascript
+- VueJS
