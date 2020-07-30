@@ -26,14 +26,7 @@
                 <v-icon v-else>mdi-plus</v-icon>
               </v-btn>
             </template>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn fab small v-bind="attrs" v-on="on">
-                  <v-icon>mdi-contain</v-icon>
-                </v-btn>
-              </template>
-              <span>Vault Item</span>
-            </v-tooltip>
+            <VaultItem />
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn fab small v-bind="attrs" v-on="on">
@@ -58,9 +51,7 @@
         </v-toolbar>
       </template>
       <template v-slot:item.name="{ item }">
-        <VaultItem v-if="item.type === 'item'" :vaultItem="item" />
-        <VaultLogin v-else-if="item.type === 'login'" :vaultLogin="item" />
-        <VaultNote v-else-if="item.type === 'note'" :vaultNote="item" />
+        <vaultEdit :vaultRecord="item" />
       </template>
       <template v-slot:item.labels="{ item }">
         <v-chip
@@ -78,17 +69,13 @@
 
 <script>
 import BreadCrumbs from '../components/BreadCrumbs';
-import VaultItem from '../components/vault/VaultItem';
-import VaultLogin from '../components/vault/VaultLogin';
-import VaultNote from '../components/vault/VaultNote';
+import vaultEdit from '../components/vault/vaultEdit';
 
 export default {
   name: 'Vault',
   components: {
     BreadCrumbs,
-    VaultItem,
-    VaultLogin,
-    VaultNote,
+    vaultEdit,
   },
   data: () => ({
     resourceType: 'vault',

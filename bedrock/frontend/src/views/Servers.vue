@@ -26,21 +26,21 @@
             <v-card-text>
               <v-container>
                 <v-row dense>
-                  <v-col cols="12">
+                  <v-col cols="12" class="ma-0 pa-1">
                     <v-text-field
                       v-model="editedItem.name"
                       label="Name*"
                       required
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="12" sm="6" class="ma-0 pa-1">
                     <v-text-field
                       v-model="editedItem.ip_address"
                       label="IP Address*"
                       required
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="12" sm="6" class="ma-0 pa-1">
                     <v-select
                       v-model="editedItem.category"
                       :items="serverCategory"
@@ -48,7 +48,7 @@
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="12" class="ma-0 pa-1">
                     <v-select
                       v-model="editedItem.operating_system"
                       :items="getOperatingSystemNames"
@@ -56,7 +56,7 @@
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="12" sm="6" class="ma-0 pa-1">
                     <v-select
                       v-model="editedItem.domain"
                       :items="getDomainNames"
@@ -64,7 +64,7 @@
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="12" sm="6" class="ma-0 pa-1">
                     <v-select
                       v-model="editedItem.cluster"
                       :items="getClusterNames"
@@ -72,7 +72,7 @@
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="12" class="ma-0 pa-1">
                     <v-autocomplete
                       v-model="editedItem.labels"
                       :items="getLabelNames"
@@ -82,7 +82,7 @@
                     >
                     </v-autocomplete>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="12" class="ma-0 pa-1">
                     <v-autocomplete
                       v-model="editedItem.environments"
                       :items="getEnvironmentNames"
@@ -92,7 +92,7 @@
                     >
                     </v-autocomplete>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="12" sm="6" class="ma-0 pa-1">
                     <v-select
                       v-model="editedItem.owner"
                       :items="getOwnerNames"
@@ -100,7 +100,7 @@
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6">
+                  <v-col cols="12" sm="6" class="ma-0 pa-1">
                     <v-select
                       v-model="editedItem.status"
                       :items="serverStatus"
@@ -108,7 +108,7 @@
                       required
                     ></v-select>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="12" class="ma-0 pa-1">
                     <v-textarea
                       v-model="editedItem.description"
                       label="Description"
