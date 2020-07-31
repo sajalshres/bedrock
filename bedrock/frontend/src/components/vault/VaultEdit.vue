@@ -27,6 +27,9 @@
           <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
+          <v-btn class="mx-2" depressed>
+            <v-icon color="error">mdi-delete</v-icon>
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false"
             >Close</v-btn
