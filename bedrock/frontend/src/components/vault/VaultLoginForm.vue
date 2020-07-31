@@ -2,21 +2,38 @@
   <v-row>
     <v-col cols="12" class="ma-0 pa-1">
       <v-text-field
-        v-model="vaultItem.name"
+        v-model="vaultLogin.name"
         label="Name*"
         required
       ></v-text-field>
     </v-col>
+    <v-col cols="12" sm="6" class="ma-0 pa-1">
+      <v-text-field
+        v-model="vaultLogin.username"
+        label="Username*"
+        required
+      ></v-text-field>
+    </v-col>
+    <v-col cols="12" sm="6" class="ma-0 pa-1">
+      <v-text-field
+        v-model="vaultLogin.password"
+        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        label="Password*"
+        :type="showPassword ? 'text' : 'password'"
+        required
+        @click:append="showPassword = !showPassword"
+      ></v-text-field>
+    </v-col>
     <v-col cols="12" class="ma-0 pa-1">
       <v-text-field
-        v-model="vaultItem.value"
-        label="Value*"
+        v-model="vaultLogin.link"
+        label="Link*"
         required
       ></v-text-field>
     </v-col>
     <v-col cols="12" class="ma-0 pa-1">
       <v-textarea
-        v-model="vaultItem.note"
+        v-model="vaultLogin.note"
         counter
         rows="3"
         label="Notes"
@@ -24,7 +41,7 @@
     </v-col>
     <v-col cols="12" class="ma-0 pa-1">
       <v-autocomplete
-        v-model="vaultItem.labels"
+        v-model="vaultLogin.labels"
         :items="['production', 'version', 'dev']"
         label="Labels"
         chips
@@ -37,16 +54,21 @@
 <script>
 export default {
   props: {
-    vaultItem: {
+    vaultLogin: {
       type: Object,
       default: () => ({
         name: '',
         type: '',
-        value: '',
+        username: '',
+        password: '',
+        link: '',
         labels: [],
       }),
     },
   },
+  data: () => ({
+    showPassword: false,
+  }),
 };
 </script>
 

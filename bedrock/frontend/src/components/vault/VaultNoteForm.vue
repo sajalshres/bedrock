@@ -2,29 +2,22 @@
   <v-row>
     <v-col cols="12" class="ma-0 pa-1">
       <v-text-field
-        v-model="vaultItem.name"
+        v-model="vaultNote.name"
         label="Name*"
         required
       ></v-text-field>
     </v-col>
     <v-col cols="12" class="ma-0 pa-1">
-      <v-text-field
-        v-model="vaultItem.value"
-        label="Value*"
-        required
-      ></v-text-field>
-    </v-col>
-    <v-col cols="12" class="ma-0 pa-1">
       <v-textarea
-        v-model="vaultItem.note"
+        v-model="vaultNote.note"
         counter
         rows="3"
-        label="Notes"
+        label="Notes*"
       ></v-textarea>
     </v-col>
     <v-col cols="12" class="ma-0 pa-1">
       <v-autocomplete
-        v-model="vaultItem.labels"
+        v-model="vaultNote.labels"
         :items="['production', 'version', 'dev']"
         label="Labels"
         chips
@@ -37,12 +30,12 @@
 <script>
 export default {
   props: {
-    vaultItem: {
+    vaultNote: {
       type: Object,
       default: () => ({
         name: '',
         type: '',
-        value: '',
+        note: '',
         labels: [],
       }),
     },

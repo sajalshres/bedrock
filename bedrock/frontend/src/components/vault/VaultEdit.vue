@@ -16,11 +16,11 @@
             :vaultItem="vaultRecord"
             v-if="vaultRecord.type === 'item'"
           />
-          <vaultLoginForm
+          <VaultLoginForm
             :vaultLogin="vaultRecord"
             v-else-if="vaultRecord.type === 'login'"
           />
-          <vaultNoteForm
+          <VaultNoteForm
             :vaultNote="vaultRecord"
             v-else-if="vaultRecord.type === 'note'"
           />
@@ -40,13 +40,13 @@
 
 <script>
 import VaultItemForm from './VaultItemForm';
-import vaultLoginForm from './vaultLoginForm';
-import vaultNoteForm from './vaultNoteForm';
+import VaultLoginForm from './VaultLoginForm';
+import VaultNoteForm from './VaultNoteForm';
 export default {
   components: {
     VaultItemForm,
-    vaultLoginForm,
-    vaultNoteForm,
+    VaultLoginForm,
+    VaultNoteForm,
   },
   props: {
     vaultRecord: Object,

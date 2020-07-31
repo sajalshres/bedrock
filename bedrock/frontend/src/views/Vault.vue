@@ -19,31 +19,7 @@
             class="pb-1"
           ></v-text-field>
           <v-spacer />
-          <v-speed-dial v-model="fab" direction="left">
-            <template v-slot:activator>
-              <v-btn v-model="fab" depressed fab small>
-                <v-icon v-if="fab">mdi-close</v-icon>
-                <v-icon v-else>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-            <VaultItem />
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn fab small v-bind="attrs" v-on="on">
-                  <v-icon>mdi-key-variant</v-icon>
-                </v-btn>
-              </template>
-              <span>Vault Login</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn fab small v-bind="attrs" v-on="on">
-                  <v-icon>mdi-note-text</v-icon>
-                </v-btn>
-              </template>
-              <span>Vault Note</span>
-            </v-tooltip>
-          </v-speed-dial>
+          <VaultCreate />
           <v-btn class="mx-2" depressed fab small @click.stop>
             <v-icon dark>mdi-reload</v-icon>
           </v-btn>
@@ -51,7 +27,7 @@
         </v-toolbar>
       </template>
       <template v-slot:item.name="{ item }">
-        <vaultEdit :vaultRecord="item" />
+        <VaultEdit :vaultRecord="item" />
       </template>
       <template v-slot:item.labels="{ item }">
         <v-chip
@@ -69,13 +45,15 @@
 
 <script>
 import BreadCrumbs from '../components/BreadCrumbs';
-import vaultEdit from '../components/vault/vaultEdit';
+import VaultEdit from '../components/vault/VaultEdit';
+import VaultCreate from '../components/vault/VaultCreate';
 
 export default {
   name: 'Vault',
   components: {
     BreadCrumbs,
-    vaultEdit,
+    VaultEdit,
+    VaultCreate,
   },
   data: () => ({
     resourceType: 'vault',
