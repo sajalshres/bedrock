@@ -1,28 +1,9 @@
 from django.db import models
+from sor.models import Label
 
 # Create your models here.
 
 """Core Vault:
-
-SecretItem (Useful for variables)
-* id
-* name
-* Value
-* Labels/Scope/Tag (Many-to-Many)
-
-SecretLogin (Useful for credentials)
-* id
-* name
-* username
-* password
-* link (foreignkey, one-to-many)
-* Labels/Scope/Tag (Many-to-Many)
-
-SecretNotes (Useful for any notes or may be ssh public key or something)
-* id
-* name
-* note
-* Labels/Scope/Tag  (Many-to-Many)
 
 Custom Fields can be attached to any of the Core Tables:
 
@@ -47,3 +28,52 @@ Assumptions:
 * API will return the secrets encrypted with user-password for security.
 * client will again de-crypt the values. Examples will be provided.
 """
+
+
+class SecretItem(models.Model):
+    """Items useful for variables
+    """
+
+    title = models.CharField(max_length=253)
+    name = models.CharField(max_length=253)
+    value = models.CharField(max_length=253)
+    note = models.TextField(null=True, blank=True)
+    labels = models.ManyToManyField(Label, related_name="secret_items")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class SecretLogin(models.Model):
+    """Secret logins useful for storing encrypted credentials
+    """
+
+    title = models.CharField(max_length=253)
+    username = models.CharField(max_length=253)
+    password = models.CharField(max_length=253)
+    note = models.TextField(null=True, blank=True)
+    labels = models.ManyToManyField(Label, related_name="secret_logins")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class SecretNotes(models.Model):
+    """Secret notes useful for storing long text notes like ssh keys
+    """
+
+    title = models.CharField(max_length=253)
+    note = models.TextField()
+    labels = models.ManyToManyField(Label, related_name="secret_notes")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Link(models.Model):
+    """Links used for secret logins
+    """
+
+    url = models.URLField(max_length=253)
+    secret_login = models.ForeignKey(
+        SecretLogin, related_name="links", on_delete=models.PROTECT
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

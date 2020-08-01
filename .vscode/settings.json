@@ -24,8 +24,12 @@
     "Dockerfile.*": "dockerfile",
     "docker-compose.*": "yaml"
   },
+  "python.envFile": "${workspaceFolder}/.env",
   "python.formatting.provider": "black",
-  "python.formatting.blackArgs": ["--line-length", "79"],
+  "python.formatting.blackArgs": [
+    "--line-length",
+    "79"
+  ],
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
@@ -33,9 +37,15 @@
   "eslint.enable": true,
   "vetur.validation.template": false,
   "vetur.format.defaultFormatter.html": "prettyhtml",
-  "eslint.validate": ["vue", "html", "javascript"],
+  "eslint.validate": [
+    "vue",
+    "html",
+    "javascript"
+  ],
   "emmet.includeLanguages": {
     "vue": "html"
   },
-  "eslint.workingDirectories": ["./bedrock/frontend"]
+  "eslint.workingDirectories": [
+    "./bedrock/frontend"
+  ]
 }
