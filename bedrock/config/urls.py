@@ -19,5 +19,6 @@ from config.views import HomePageView
 urlpatterns = [
     path("api/auth/", include("authenticate.urls")),
     path("api/sor/", include("sor.urls")),
+    path("api/vault/", include("vault.urls")),
     re_path(r"^.*$", HomePageView.as_view(), name="home"),
 ]

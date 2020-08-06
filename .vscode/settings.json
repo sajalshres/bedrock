@@ -13,7 +13,7 @@
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
   //"editor.detectIndentation": true,
-  "editor.tabSize": 2,
+  "editor.tabSize": 4,
   // files settings
   "files.watcherExclude": {
     "**/.git/objects/**": true,
