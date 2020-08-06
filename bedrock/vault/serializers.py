@@ -17,7 +17,7 @@ class SecretItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SecretItem
-        fields = ["id", "title", "name", "value", "note", "labels"]
+        fields = ["id", "title", "name", "value", "note", "labels", "type"]
 
     def create(self, validated_data):
         ModelClass = self.Meta.model

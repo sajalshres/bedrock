@@ -42,6 +42,10 @@ class SecretItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def type(self):
+        return "item"
+
 
 class SecretLogin(models.Model):
     """Secret logins useful for storing encrypted credentials
