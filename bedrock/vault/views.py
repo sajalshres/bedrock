@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from vault.models import SecretItem, SecretLogin, SecretNotes, Link
-from vault.serializers import SecretItemSerializer
+from vault.serializers import SecretItemSerializer, SecretNotesSerializer
 
 
 class SecretItemView(viewsets.ModelViewSet):
@@ -16,3 +16,11 @@ class SecretItemView(viewsets.ModelViewSet):
     serializer_class = SecretItemSerializer
     permission_classes = [IsAuthenticated]
 
+
+class SecretNotesView(viewsets.ModelViewSet):
+    """Rest view for secret notes
+    """
+
+    queryset = SecretNotes.objects.all()
+    serializer_class = SecretNotesSerializer
+    permission_classes = [IsAuthenticated]

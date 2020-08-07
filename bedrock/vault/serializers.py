@@ -39,8 +39,25 @@ class SecretLoginSerializer(serializers.ModelSerializer):
     pass
 
 
-class SecretNotesSerializer(serializers.ModelSerializer):
+class SecretNotesSerializer(
+    serializers.ModelSerializer, NestedSerializerMixin
+):
     """SecretNotes model serializer
     """
 
-    pass
+    labels = ManyToManyRelatedField()
+
+    class Meta:
+        model = SecretNotes
+        fields = ["id", "title", "note", "labels", "type"]
+
+    def validate_labels(self, value):
+        labels = []
+
+        for label_name in value:
+            try:
+                labels.append(Label.objects.get(name=label_name))
+            except Label.DoesNotExist:
+                msg = "Label %s matching query does not exist" % label_name
+                raise ValidationError([msg])
+        return labels
