@@ -59,6 +59,10 @@ class SecretLogin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def type(self):
+        return "login"
+
 
 class SecretNotes(models.Model):
     """Secret notes useful for storing long text notes like ssh keys
@@ -69,6 +73,10 @@ class SecretNotes(models.Model):
     labels = models.ManyToManyField(Label, related_name="secret_notes")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def type(self):
+        return "notes"
 
 
 class Link(models.Model):
