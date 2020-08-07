@@ -12,14 +12,16 @@ class URLListField(Field):
         return related_field.values_list("url", flat=True)
 
     def to_internal_value(self, data):
-        if not isinstance(data, str):
-            msg = "Incorrect Type. Expected a str but got %s" % (
+        if not isinstance(data, list):
+            msg = "Incorrect Type. Expected a list but got %s" % (
                 type(data).__name__
             )
             raise ValidationError([msg])
 
-        if not data:
-            msg = "%s value cannot be empty" % (self.field_name)
+        if not all(isinstance(item, str) for item in data):
+            msg = "Incorrect Value Type. Expected %s value in str type" % (
+                self.source
+            )
             raise ValidationError([msg])
 
         return data

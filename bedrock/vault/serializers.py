@@ -55,6 +55,24 @@ class SecretLoginSerializer(
             "type",
         ]
 
+    def create(self, validated_data):
+        links = validated_data.pop("links")
+        instance = super().create(validated_data)
+
+        for link in links:
+            instance.links.create(url=link)
+
+        return instance
+
+    def update(self, instance, validated_data):
+        links = validated_data.pop("links")
+        instance = super().update(instance, validated_data)
+
+        for link in links:
+            instance.links.update_or_create(url=link)
+
+        return instance
+
     def validate_labels(self, value):
         labels = []
 
