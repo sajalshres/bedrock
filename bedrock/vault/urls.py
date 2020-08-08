@@ -4,11 +4,19 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from vault.views import SecretItemView, SecretNotesView, SecretLoginView
+from vault.views import (
+    VaultAPIView,
+    SecretItemView,
+    SecretNotesView,
+    SecretLoginView,
+)
 
 ROUTER = DefaultRouter()
 ROUTER.register(r"items", SecretItemView)
 ROUTER.register(r"notes", SecretNotesView)
 ROUTER.register(r"logins", SecretLoginView)
 
-urlpatterns = [path("", include(ROUTER.urls))]
+urlpatterns = [
+    path("", VaultAPIView.as_view()),
+    path("", include(ROUTER.urls)),
+]

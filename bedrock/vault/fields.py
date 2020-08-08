@@ -25,4 +25,3 @@ class URLListField(Field):
             raise ValidationError([msg])
 
         return data
-

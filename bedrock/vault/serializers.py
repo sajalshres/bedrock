@@ -1,14 +1,13 @@
 """Serializers for Vault api app models
 """
 from rest_framework import serializers
-from rest_framework.utils import model_meta
 from rest_framework.exceptions import ValidationError
 
-from common.fields import ManyToManyRelatedField, ManyToOneRelatedField
+from common.fields import ManyToManyRelatedField
 from common.mixins import NestedSerializerMixin
 from sor.models import Label
 from vault.fields import URLListField
-from vault.models import SecretItem, SecretLogin, SecretNotes, Link
+from vault.models import SecretItem, SecretLogin, SecretNotes
 
 
 class SecretItemSerializer(serializers.ModelSerializer, NestedSerializerMixin):
@@ -56,7 +55,7 @@ class SecretLoginSerializer(
         ]
 
     def create(self, validated_data):
-        links = validated_data.pop("links")
+        links = validated_data.pop("links", [])
         instance = super().create(validated_data)
 
         for link in links:
@@ -65,8 +64,10 @@ class SecretLoginSerializer(
         return instance
 
     def update(self, instance, validated_data):
-        links = validated_data.pop("links")
+        links = validated_data.pop("links", [])
         instance = super().update(instance, validated_data)
+
+        instance.links.all().delete()
 
         for link in links:
             instance.links.update_or_create(url=link)
