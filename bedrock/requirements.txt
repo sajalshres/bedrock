@@ -14,3 +14,6 @@ coverage
 
 # Deployment
 gunicorn==20.0.4
+
+# Documentation
+drf-yasg==1.17.1
