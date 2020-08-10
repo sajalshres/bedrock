@@ -16,6 +16,7 @@ from vault.serializers import (
 
 
 class VaultAPIView(ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class_item = SecretItemSerializer
     serializer_class_login = SecretLoginSerializer
     serializer_class_note = SecretNotesSerializer
