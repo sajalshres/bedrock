@@ -1,5 +1,8 @@
+from django.db import models
 from rest_framework.serializers import Field
 from rest_framework.exceptions import ValidationError
+
+from vault.mixins import EncryptedFieldMixin
 
 
 class URLListField(Field):
@@ -25,3 +28,7 @@ class URLListField(Field):
             raise ValidationError([msg])
 
         return data
+
+
+class EncryptedCharField(EncryptedFieldMixin, models.CharField):
+    pass
