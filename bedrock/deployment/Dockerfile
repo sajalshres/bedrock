@@ -6,10 +6,10 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install psycopg2 dependencies
+# install packages
 RUN apk update \
   && apk add gcc musl-dev libffi-dev openssl-dev postgresql-dev \
-  && apk add python3-dev zeromq-dev
+  && apk add python3-dev zeromq-dev nodejs npm
 
 # install dependencies
 RUN pip install --upgrade pip
