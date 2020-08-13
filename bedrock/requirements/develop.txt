@@ -7,3 +7,4 @@ jupyterlab
 jupyter-lsp
 jupyterlab_code_formatter
 python-language-server[all]
+black

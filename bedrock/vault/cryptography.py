@@ -21,13 +21,14 @@ class Cryptography:
             )
         assert len(password) >= 32, "vault key length must be more than 32"
         self.password = password
+        self.salt = os.urandom(16)
 
     @property
     def kdf(self):
         return PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
-            salt=b"this is a salt",
+            salt=self.salt,
             iterations=100000,
             backend=default_backend(),
         )
@@ -45,7 +46,13 @@ class Cryptography:
         return Fernet(key=self.password)
 
     def encrypt(self, message):
-        return self.fernet.encrypt(force_bytes(message))
+        return force_str(
+            base64.urlsafe_b64encode(
+                self.salt + self.fernet.encrypt(force_bytes(message))
+            )
+        )
 
     def decrypt(self, encrypted_message):
-        return self.fernet.decrypt(encrypted_message)
+        encrypted_message = base64.urlsafe_b64decode(encrypted_message)
+        self.salt = encrypted_message[:16]
+        return force_str(self.fernet.decrypt(encrypted_message[16:]))
