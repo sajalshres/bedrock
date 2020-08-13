@@ -1,12 +1,52 @@
-name: CI Master
+name: CI Build
 
 on:
   push:
     branches: [master]
 
 jobs:
-  build:
-    name: Build Docker image
+  test:
+    name: Test Backend
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        working-directory: ./bedrock
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run Tests
+        working-directory: ./bedrock
+        run: |
+          python manage.py test --settings=config.settings_tests
+  build-develop:
+    name: Build Develop
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: build
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: sajalshres/bedrock
+          tags: develop
+          path: bedrock/
+          dockerfile: bedrock/deployment/Dockerfile
+  build-latest:
+    name: Build Latest
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: checkout
