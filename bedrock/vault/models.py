@@ -1,6 +1,8 @@
 from django.db import models
 from sor.models import Label
 
+from vault.fields import EncryptedCharField
+
 # Create your models here.
 
 """Core Vault:
@@ -53,7 +55,7 @@ class SecretLogin(models.Model):
 
     title = models.CharField(max_length=253)
     username = models.CharField(max_length=253)
-    password = models.CharField(max_length=253)
+    password = EncryptedCharField(max_length=253)
     note = models.TextField(null=True, blank=True)
     labels = models.ManyToManyField(Label, related_name="secret_logins")
     created_at = models.DateTimeField(auto_now_add=True)

@@ -31,4 +31,4 @@ class URLListField(Field):
 
 
 class EncryptedCharField(EncryptedFieldMixin, models.CharField):
-    pass
+    prepared_max_length = 255
