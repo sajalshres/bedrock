@@ -12,8 +12,13 @@ RUN apk update \
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements /usr/src/app
+COPY ./requirements /usr/src/app/requirements
 RUN pip install -r requirements/develop.txt
+
+# install jupyter frontend extension
+RUN jupyter labextension install @krassowski/jupyterlab-lsp \
+  && jupyter labextension install @ryantam626/jupyterlab_code_formatter \
+  && jupyter serverextension enable --py jupyterlab_code_formatter
 
 # copy project
 COPY . /usr/src/app/
