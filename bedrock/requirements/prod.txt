@@ -1,0 +1,4 @@
+-r common.txt
+
+# Deployment
+gunicorn==20.0.4

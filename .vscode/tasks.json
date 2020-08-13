@@ -74,5 +74,51 @@
             "group": "none",
             "problemMatcher": [],
         },
+        {
+            "label": "bedrock: shell",
+            "type": "shell",
+            "command": "docker exec -it bedrock_web python manage.py shell",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true,
+                "group": "common"
+            },
+            "group": "none",
+            "problemMatcher": [],
+        },
+        {
+            "label": "jupter: start",
+            "type": "shell",
+            "command": "docker exec bedrock_web sh -c 'cd /usr/src/app ; python manage.py shell_plus --notebook'",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false,
+                "group": "jupyter"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "jupyter: stop",
+            "type": "shell",
+            "command": "docker exec bedrock_web sh -c 'cd /usr/src/app ; jupyter notebook stop'",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": false,
+                "group": "jupyter",
+            },
+            "problemMatcher": []
+        }
     ]
 }

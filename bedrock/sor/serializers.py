@@ -4,6 +4,8 @@ from rest_framework import serializers
 from rest_framework.utils import model_meta
 from rest_framework.exceptions import ValidationError
 
+from common.fields import ManyToOneRelatedField, ManyToManyRelatedField
+from common.mixins import NestedSerializerMixin
 from sor.models import (
     Label,
     Owner,
@@ -14,54 +16,6 @@ from sor.models import (
     Server,
     Product,
 )
-
-
-class ManyToOneRelatedField(serializers.Field):
-    """ManytoOne related custom serializer field
-
-    TODO: Add Unit Test
-    """
-
-    def to_representation(self, related_field):
-        return related_field.name
-
-    def to_internal_value(self, data):
-        if not isinstance(data, str):
-            msg = "Incorrect Type. Expected a str but got %s" % (
-                type(data).__name__
-            )
-            raise ValidationError([msg])
-
-        if not data:
-            msg = "%s value cannot be empty" % (self.field_name)
-            raise ValidationError([msg])
-
-        return data
-
-
-class ManyToManyRelatedField(serializers.Field):
-    """ManytoMany related custom serializer field
-
-    TODO: Add Unit Test
-    """
-
-    def to_representation(self, related_field):
-        return [item.name for item in related_field.all()]
-
-    def to_internal_value(self, data):
-        if not isinstance(data, list):
-            msg = "Incorrect Type. Expected a list but got %s" % (
-                type(data).__name__
-            )
-            raise ValidationError([msg])
-
-        if not all(isinstance(item, str) for item in data):
-            msg = "Incorrect Value Type. Expected %s value in str type" % (
-                self.source
-            )
-            raise ValidationError([msg])
-
-        return data
 
 
 class LabelSerializer(serializers.ModelSerializer):
@@ -169,7 +123,7 @@ class OperatingSystemSerializer(serializers.ModelSerializer):
         ]
 
 
-class ServerSerializer(serializers.ModelSerializer):
+class ServerSerializer(serializers.ModelSerializer, NestedSerializerMixin):
     """Serializes Server model
     """
 
@@ -196,46 +150,6 @@ class ServerSerializer(serializers.ModelSerializer):
             "description",
             "status",
         ]
-
-    def create(self, validated_data):
-        ModelClass = self.Meta.model
-        info = model_meta.get_field_info(ModelClass)
-        many_to_many = {}
-
-        for field_name, relation_info in info.relations.items():
-            if relation_info.to_many and (field_name in validated_data):
-                many_to_many[field_name] = validated_data.pop(field_name)
-
-        instance = ModelClass._default_manager.create(**validated_data)
-
-        if many_to_many:
-            for field_name, value in many_to_many.items():
-                field = getattr(instance, field_name)
-                field.set(value)
-
-        return instance
-
-    def update(self, instance, validated_data):
-        model_field_info = model_meta.get_field_info(instance)
-
-        many_to_many_fields = []
-
-        for attr, value in validated_data.items():
-            if (
-                attr in model_field_info.relations
-                and model_field_info.relations[attr].to_many
-            ):
-                many_to_many_fields.append((attr, value))
-            else:
-                setattr(instance, attr, value)
-
-        instance.save()
-
-        for attr, value in many_to_many_fields:
-            field = getattr(instance, attr)
-            field.set(value)
-
-        return instance
 
     def validate_owner(self, value):
         try:
