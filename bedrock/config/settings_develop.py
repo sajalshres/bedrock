@@ -24,3 +24,22 @@ DATABASES = {
         "PORT": os.environ.get("SQL_PORT", ""),
     }
 }
+
+# Installed App
+
+INSTALLED_APPS += [
+    "django_extensions",
+]
+
+# Jupyter Notebook Arguments
+
+NOTEBOOK_ARGUMENTS = [
+    "--ip",
+    "0.0.0.0",
+    "--allow-root",
+    "--no-browser",
+    "--NotebookApp.disable_check_xsrf=True",
+    "--NotebookApp.token=''",
+    "--NotebookApp.password=''",
+    "--NotebookApp.iopub_data_rate_limit=10000000000",
+]

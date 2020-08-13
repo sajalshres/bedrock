@@ -1,0 +1,19 @@
+# Core
+Django==3.0.7
+django-filter==2.2.0
+djangorestframework==3.11.0
+
+# Database
+psycopg2-binary==2.8.3
+
+# Authentication
+djangorestframework-simplejwt==4.4.0
+
+# Testing
+coverage
+
+# Documentation
+drf-yasg==1.17.1
+
+# Encryption
+cryptography==3.0

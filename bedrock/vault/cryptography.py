@@ -7,7 +7,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from django.conf import settings
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, force_str
 
 
 class Cryptography:
@@ -27,7 +27,7 @@ class Cryptography:
         return PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
-            salt=os.urandom(16),
+            salt=b"this is a salt",
             iterations=100000,
             backend=default_backend(),
         )
@@ -38,7 +38,7 @@ class Cryptography:
 
     @password.setter
     def password(self, password):
-        self._password = password
+        self._password = force_bytes(password)
 
     @property
     def fernet(self):
@@ -48,4 +48,4 @@ class Cryptography:
         return self.fernet.encrypt(force_bytes(message))
 
     def decrypt(self, encrypted_message):
-        return self.fernet.decrypt(token=encrypted_message)
+        return self.fernet.decrypt(encrypted_message)

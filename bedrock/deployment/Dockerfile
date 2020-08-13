@@ -12,8 +12,8 @@ RUN apk update \
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt /usr/src/app/requirements.txt
-RUN pip install -r requirements.txt
+COPY ./requirements /usr/src/app
+RUN pip install -r requirements/develop.txt
 
 # copy project
 COPY . /usr/src/app/
