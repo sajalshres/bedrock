@@ -8,7 +8,8 @@ ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apk update \
-  && apk add postgresql-dev gcc python3-dev musl-dev libffi-dev openssl-dev
+  && apk add gcc musl-dev libffi-dev openssl-dev postgresql-dev \
+  && apk add python3-dev py3-zmq
 
 # install dependencies
 RUN pip install --upgrade pip
