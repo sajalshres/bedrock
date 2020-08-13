@@ -69,7 +69,7 @@ RUN mkdir $APP_HOME/static
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apk update && apk add gcc libpq
+RUN apk update && apk add gcc musl-dev libpq
 COPY --from=build-backend /usr/src/app/wheels /wheels
 COPY --from=build-backend /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
