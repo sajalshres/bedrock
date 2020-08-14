@@ -41,7 +41,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-import { RESOURCE_CREATE } from '../store/actions.type';
+import { CREATE_RESOURCE } from '../store/actions.type';
 export default {
   name: 'Labels',
   data: () => ({
@@ -63,7 +63,7 @@ export default {
       this.dialog = false;
     },
     ...mapActions({
-      createResource: RESOURCE_CREATE,
+      createResource: CREATE_RESOURCE,
     }),
   },
 };

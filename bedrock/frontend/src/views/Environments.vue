@@ -111,9 +111,9 @@ import { getStatusColor } from '../utils/common';
 
 import {
   FETCH_RESOURCES,
-  RESOURCE_CREATE,
-  RESOURCE_UPDATE,
-  RESOURCE_DELETE,
+  CREATE_RESOURCE,
+  UPDATE_RESOURCE,
+  DELETE_RESOURCE,
 } from '../store/actions.type';
 import BreadCrumbs from '../components/BreadCrumbs';
 import ServerModal from '../components/ServerModal';
@@ -234,9 +234,9 @@ export default {
 
     ...mapActions({
       fetchResources: FETCH_RESOURCES,
-      createResource: RESOURCE_CREATE,
-      updateResource: RESOURCE_UPDATE,
-      removeResource: RESOURCE_DELETE,
+      createResource: CREATE_RESOURCE,
+      updateResource: UPDATE_RESOURCE,
+      removeResource: DELETE_RESOURCE,
     }),
   },
 };

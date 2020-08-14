@@ -69,11 +69,7 @@ const ApiService = {
     ] = `Bearer ${JwtService.getToken()}`;
   },
   get(resource, slug = '') {
-    return ApiClient.get(`${resource}/${slug}`, {
-      headers: {
-        Authorization: '',
-      },
-    });
+    return ApiClient.get(`${resource}/${slug}`, {});
   },
   post(resource, params) {
     return ApiClient.post(`${resource}`, params);
@@ -106,5 +102,23 @@ export const SorApiService = {
   },
   delete(resource) {
     return ApiService.delete(`sor/${resource}/`);
+  },
+};
+
+export const VaultApiService = {
+  get(resource, slug = '') {
+    return ApiService.get(`vault/${resource}`, slug);
+  },
+  post(resource, params) {
+    return ApiService.post(`vault/${resource}/`, params);
+  },
+  update(resource, slug, params) {
+    return ApiService.put(`vault/${resource}/${slug}/`, params);
+  },
+  put(resource, params) {
+    return ApiService.put(`vault/${resource}/`, params);
+  },
+  delete(resource) {
+    return ApiService.delete(`vault/${resource}/`);
   },
 };

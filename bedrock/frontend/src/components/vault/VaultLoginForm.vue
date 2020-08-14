@@ -2,8 +2,8 @@
   <v-row>
     <v-col cols="12" class="ma-0 pa-1">
       <v-text-field
-        v-model="vaultLogin.name"
-        label="Name*"
+        v-model="vaultLogin.title"
+        label="Title*"
         required
       ></v-text-field>
     </v-col>
@@ -42,7 +42,7 @@
     <v-col cols="12" class="ma-0 pa-1">
       <v-autocomplete
         v-model="vaultLogin.labels"
-        :items="['production', 'version', 'dev']"
+        :items="getLabelNames"
         label="Labels"
         chips
         multiple
@@ -52,23 +52,31 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   props: {
     vaultLogin: {
       type: Object,
       default: () => ({
-        name: '',
-        type: '',
+        title: '',
         username: '',
         password: '',
         link: '',
+        note: '',
         labels: [],
+        type: '',
       }),
     },
   },
   data: () => ({
     showPassword: false,
   }),
+  computed: {
+    getLabelNames() {
+      return this.getLabels.map(({ name }) => name);
+    },
+    ...mapGetters(['getLabels']),
+  },
 };
 </script>
 

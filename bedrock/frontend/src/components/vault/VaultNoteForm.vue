@@ -2,8 +2,8 @@
   <v-row>
     <v-col cols="12" class="ma-0 pa-1">
       <v-text-field
-        v-model="vaultNote.name"
-        label="Name*"
+        v-model="vaultNote.title"
+        label="Title*"
         required
       ></v-text-field>
     </v-col>
@@ -33,10 +33,10 @@ export default {
     vaultNote: {
       type: Object,
       default: () => ({
-        name: '',
-        type: '',
+        title: '',
         note: '',
         labels: [],
+        type: '',
       }),
     },
   },

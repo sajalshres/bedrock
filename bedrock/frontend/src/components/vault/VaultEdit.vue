@@ -4,12 +4,12 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn text v-bind="attrs" v-on="on">
           <v-icon left>{{ getVaultIcon() }}</v-icon>
-          {{ vaultRecord.name }}
+          {{ vaultRecord.title }}
         </v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Edit: {{ vaultRecord.name }}</span>
+          <span class="headline">Edit: {{ vaultRecord.title }}</span>
         </v-card-title>
         <v-card-text>
           <VaultItemForm

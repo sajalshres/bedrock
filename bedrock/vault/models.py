@@ -78,7 +78,7 @@ class SecretNotes(models.Model):
 
     @property
     def type(self):
-        return "notes"
+        return "note"
 
 
 class Link(models.Model):

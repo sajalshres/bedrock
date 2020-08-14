@@ -3,7 +3,7 @@
     <BreadCrumbs />
     <v-data-table
       :headers="headers"
-      :items="vault"
+      :items="getVault"
       :search="search"
       :dense="dense"
       class="elevation-1"
@@ -44,6 +44,9 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import { getStatusColor } from '../utils/common';
+import { FETCH_VAULT_RESOURCE } from '../store/actions.type';
 import BreadCrumbs from '../components/BreadCrumbs';
 import VaultEdit from '../components/vault/VaultEdit';
 import VaultCreate from '../components/vault/VaultCreate';
@@ -57,6 +60,7 @@ export default {
   },
   data: () => ({
     resourceType: 'vault',
+    resourceTypes: ['items', 'logins', 'notes'],
     loadingText: 'Loading vault, please wait.',
     fab: false,
     dense: false,
@@ -71,7 +75,10 @@ export default {
     ],
   }),
   created() {
-    this.initialize();
+    this.loadResources();
+  },
+  computed: {
+    ...mapGetters(['getVault', 'getVaultByType']),
   },
   methods: {
     initialize() {
@@ -104,6 +111,18 @@ export default {
         },
       ];
     },
+
+    loadResources(force = false) {
+      this.resourceTypes.forEach(type => {
+        if (this.getVaultByType(type).length === 0 || force) {
+          this.fetchResource(type);
+        }
+      });
+    },
+
+    ...mapActions({
+      fetchResource: FETCH_VAULT_RESOURCE,
+    }),
   },
 };
 </script>

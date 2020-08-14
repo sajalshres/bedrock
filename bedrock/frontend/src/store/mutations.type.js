@@ -6,9 +6,15 @@ export const SET_ERROR = 'setError';
 // sor mutation types
 export const SET_RESOURCES = 'setResources';
 export const SET_RESOURCE = 'setResource';
-export const RESOURCE_ADD = 'addResource';
-export const RESOURCE_EDIT = 'editResource';
-export const RESOURCE_REMOVE = 'removeResource';
+export const ADD_RESOURCE = 'addResource';
+export const EDIT_RESOURCE = 'editResource';
+export const REMOVE_RESOURCE = 'removeResource';
+
+// vault mutation types
+export const SET_VAULT_RESOURCE = 'setVaultResource';
+export const ADD_VAULT_RESOURCE = 'addVaultResource';
+export const EDIT_VAULT_RESOURCE = 'editVaultResource';
+export const REMOVE_VAULT_RESOURCE = 'removeVaultResource';
 
 // snack bar mutation types
 export const SET_SNACKBAR = 'setSnackBar';
@@ -23,9 +29,13 @@ export default {
   SET_ERROR,
   SET_RESOURCES,
   SET_RESOURCE,
-  RESOURCE_ADD,
-  RESOURCE_EDIT,
-  RESOURCE_REMOVE,
+  ADD_RESOURCE,
+  EDIT_RESOURCE,
+  REMOVE_RESOURCE,
+  SET_VAULT_RESOURCE,
+  ADD_VAULT_RESOURCE,
+  EDIT_VAULT_RESOURCE,
+  REMOVE_VAULT_RESOURCE,
   SET_SNACKBAR,
   SET_AUTH,
   PURGE_AUTH,

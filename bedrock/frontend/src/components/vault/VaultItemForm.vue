@@ -2,6 +2,13 @@
   <v-row>
     <v-col cols="12" class="ma-0 pa-1">
       <v-text-field
+        v-model="vaultItem.title"
+        label="Title*"
+        required
+      ></v-text-field>
+    </v-col>
+    <v-col cols="12" class="ma-0 pa-1">
+      <v-text-field
         v-model="vaultItem.name"
         label="Name*"
         required
@@ -40,10 +47,11 @@ export default {
     vaultItem: {
       type: Object,
       default: () => ({
+        title: '',
         name: '',
-        type: '',
         value: '',
         labels: [],
+        type: '',
       }),
     },
   },
