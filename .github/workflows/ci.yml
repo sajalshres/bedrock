@@ -52,8 +52,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./bedrock
-          file: ./deployment/Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/386
+          file: ./bedrock/deployment/Dockerfile
           push: true
           tags: sajalshres/bedrock:develop
 
@@ -61,7 +60,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./bedrock
-          file: ./deployment/Dockerfile.prod
-          platforms: linux/amd64,linux/arm64,linux/386
+          file: ./bedrock/deployment/Dockerfile.prod
           push: true
           tags: sajalshres/bedrock:latest
