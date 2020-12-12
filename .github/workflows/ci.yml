@@ -59,7 +59,7 @@ jobs:
           builder: ${{ steps.builder1.outputs.name }}
           target: target1
           context: ./bedrock
-          file: deployment/Dockerfile
+          file: ./deployment/Dockerfile
           platforms: linux/amd64,linux/arm64,linux/386
           push: true
           tags: sajalshres/bedrock:develop
@@ -70,7 +70,7 @@ jobs:
           builder: ${{ steps.builder2.outputs.name }}
           target: target2
           context: ./bedrock
-          file: deployment/Dockerfile.prod
+          file: ./deployment/Dockerfile.prod
           platforms: linux/amd64,linux/arm64,linux/386
           push: true
           tags: sajalshres/bedrock:latest
