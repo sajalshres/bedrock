@@ -16,4 +16,4 @@ coverage
 drf-yasg==1.17.1
 
 # Encryption
-cryptography==3.0
+cryptography==3.2
