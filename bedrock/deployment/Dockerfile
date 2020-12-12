@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED 1
 
 # install packages
 RUN apk update \
-  && apk add gcc musl-dev libffi-dev openssl-dev postgresql-dev \
+  && apk add gcc musl-dev libffi-dev openssl-dev postgresql-dev g++ \
   && apk add python3-dev zeromq-dev nodejs npm
 
 # install dependencies
